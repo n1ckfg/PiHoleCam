@@ -1,6 +1,6 @@
 PiHoleCam
-Copyright (c) 2018 Nick Fox-Gieg
-http://fox-gieg.com
+Copyright (c) 2020 Nick Fox-Gieg
+https://fox-gieg.com
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
