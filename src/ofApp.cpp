@@ -2,20 +2,22 @@
 
 using namespace cv;
 using namespace ofxCv;
+using namespace glm;
 
+//--------------------------------------------------------------
 void ofApp::setup() {
     settings.loadFile("settings.xml");
 
-    ofSetVerticalSync(false);    
-    framerate = settings.getValue("settings:framerate", 60); 
-    width = settings.getValue("settings:width", 160); 
-    height = settings.getValue("settings:height", 120); 
+    ofSetVerticalSync(false);
+    framerate = settings.getValue("settings:framerate", 60);
+    width = settings.getValue("settings:width", 160);
+    height = settings.getValue("settings:height", 120);
     ofSetFrameRate(framerate);
 
-    host = settings.getValue("settings:host", "127.0.0.1"); 
+    host = settings.getValue("settings:host", "127.0.0.1");
     port = settings.getValue("settings:port", 7110);
-    
-    debug = (bool) settings.getValue("settings:debug", 1);
+
+    debug = (bool)settings.getValue("settings:debug", 1);
 
     sender.setup(host, port);
 
@@ -26,7 +28,8 @@ void ofApp::setup() {
     if (file) { // use existing file if it's there
         buff = file.readToBuffer();
         compname = buff.getText();
-    } else { // otherwise make a new one
+    }
+    else { // otherwise make a new one
         compname += "_" + ofGetTimestampString("%y%m%d%H%M%S%i");
         ofStringReplace(compname, "\n", "");
         ofStringReplace(compname, "\r", "");
@@ -38,33 +41,33 @@ void ofApp::setup() {
     cam.setup(width, height, false); // color/gray;
 
     triggerThreshold = settings.getValue("settings:trigger_threshold", 0.05);
-    
+
     flowResetThreshold = settings.getValue("settings:flow_reset_threshold", 1.0);
     counterMax = settings.getValue("settings:trigger_frames", 3);
     timeDelay = settings.getValue("settings:time_delay", 5000);
     counterDelay = settings.getValue("settings:counter_reset", 1000);
 
     // ~ ~ ~   cam settings   ~ ~ ~
-    camSharpness = settings.getValue("settings:sharpness", 0); 
-    camContrast = settings.getValue("settings:contrast", 0); 
-    camBrightness = settings.getValue("settings:brightness", 50); 
-    camIso = settings.getValue("settings:iso", 300); 
-    camExposureMode = settings.getValue("settings:exposure_mode", 0); 
-    camExposureCompensation = settings.getValue("settings:exposure_compensation", 0); 
+    camSharpness = settings.getValue("settings:sharpness", 0);
+    camContrast = settings.getValue("settings:contrast", 0);
+    camBrightness = settings.getValue("settings:brightness", 50);
+    camIso = settings.getValue("settings:iso", 300);
+    camExposureMode = settings.getValue("settings:exposure_mode", 0);
+    camExposureCompensation = settings.getValue("settings:exposure_compensation", 0);
     camShutterSpeed = settings.getValue("settings:shutter_speed", 0);
 
     cam.setSharpness(camSharpness);
     cam.setContrast(camContrast);
     cam.setBrightness(camBrightness);
     cam.setISO(camIso);
-    cam.setExposureMode((MMAL_PARAM_EXPOSUREMODE_T) camExposureMode);
+    cam.setExposureMode((MMAL_PARAM_EXPOSUREMODE_T)camExposureMode);
     cam.setExposureCompensation(camExposureCompensation);
     cam.setShutterSpeed(camShutterSpeed);
     //cam.setFrameRate // not implemented in ofxCvPiCam
 
     // ~ ~ ~   optical flow settings   ~ ~ ~
-    useFarneback = (bool) settings.getValue("settings:dense_flow", 1);
-    sendMotionInfo = (bool) settings.getValue("settings:send_motion_info", 1);
+    useFarneback = (bool)settings.getValue("settings:dense_flow", 1);
+    sendMotionInfo = (bool)settings.getValue("settings:send_motion_info", 1);
     pyrScale = 0.5;   // 0 to 1, default 0.5
     levels = 4;   // 1 to 8, default 4
     winsize = 8;   // 4 to 64, default 8
@@ -83,73 +86,101 @@ void ofApp::setup() {
     markTriggerTime = 0;
     trigger = false;
     isMoving = false;
+
+    // ~ ~ ~ ~ ~ ~ ~ 
+
+    //ofEnableDepthTest();
+
+#ifdef TARGET_OPENGLES
+    shader.load("shadersES2/shader");
+#else
+    if (ofIsGLProgrammableRenderer()) {
+        shader.load("shadersGL3/shader");
+    } else {
+        shader.load("shadersGL2/shader");
+    }
+#endif
+
+    rgb.allocate(2048, 2048, OF_IMAGE_COLOR);
+    rgb.loadImage("rgb.jpg");
+    depth.allocate(512, 512, OF_IMAGE_GRAYSCALE);
+    depth.loadImage("depth.png");
+    
+    rgb.getTexture().bind();
+
+    plane.set(800, 800, depth.getWidth(), depth.getHeight());
+    plane.mapTexCoordsFromTexture(rgb.getTexture());
+
+    posOffset = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
+    pos = vec2(posOffset.x, posOffset.y);
 }
 
+//--------------------------------------------------------------
 void ofApp::update() {
     frame = cam.grab();
 
     if (!frame.empty()) {
         if (useFarneback) {
-			curFlow = &farneback;
-	        farneback.setPyramidScale( pyrScale );
-	        farneback.setNumLevels( levels );
-	        farneback.setWindowSize( winsize );
-	        farneback.setNumIterations( iterations );
-	        farneback.setPolyN( polyN );
-	        farneback.setPolySigma( polySigma );
-	        farneback.setUseGaussian( OPTFLOW_FARNEBACK_GAUSSIAN );
-		} else {
-			curFlow = &pyrLk;
-            pyrLk.setMaxFeatures( maxFeatures );
-            pyrLk.setQualityLevel( qualityLevel );
-            pyrLk.setMinDistance( minDistance );
-            pyrLk.setWindowSize( winSize );
-            pyrLk.setMaxLevel( maxLevel );
-		}
+            curFlow = &farneback;
+            farneback.setPyramidScale(pyrScale);
+            farneback.setNumLevels(levels);
+            farneback.setWindowSize(winsize);
+            farneback.setNumIterations(iterations);
+            farneback.setPolyN(polyN);
+            farneback.setPolySigma(polySigma);
+            farneback.setUseGaussian(OPTFLOW_FARNEBACK_GAUSSIAN);
+        } else {
+            curFlow = &pyrLk;
+            pyrLk.setMaxFeatures(maxFeatures);
+            pyrLk.setQualityLevel(qualityLevel);
+            pyrLk.setMinDistance(minDistance);
+            pyrLk.setWindowSize(winSize);
+            pyrLk.setMaxLevel(maxLevel);
+        }
 
         // you use Flow polymorphically
         curFlow->calcOpticalFlow(frame);
 
         if (useFarneback) {
-        	motionValRaw = farneback.getAverageFlow();
-    	} else {
-    		motionValRaw = glm::vec2(0,0);
-    		auto points = pyrLk.getMotion();
+            motionValRaw = farneback.getAverageFlow();
+        } else {
+            motionValRaw = glm::vec2(0, 0);
+            auto points = pyrLk.getMotion();
 
-    		for (int i=0; i<points.size(); i++) {
-    			motionValRaw.x += points[i].x;
-    			motionValRaw.y += points[i].y;
-    		}  
-    		motionValRaw.x /= (float) points.size();
-    		motionValRaw.y /= (float) points.size();
-    	}
+            for (int i = 0; i < points.size(); i++) {
+                motionValRaw.x += points[i].x;
+                motionValRaw.y += points[i].y;
+            }
+            motionValRaw.x /= (float)points.size();
+            motionValRaw.y /= (float)points.size();
+        }
 
         motionVal = (abs(motionValRaw.x) + abs(motionValRaw.y)) / 2.0;
-        
+
         isMoving = motionVal > triggerThreshold;
-        
+
         std::cout << "val: " << motionVal << " motion: " << isMoving << endl;
 
         int t = ofGetElapsedTimeMillis();
-        
+
         // reset count if too much time has elapsed since the last change
         if (t > markCounterTime + counterDelay) counterOn = 0;
 
         // motion detection logic
         // 1. motion detected, but not triggered yet
-    	if (!trigger && isMoving) {
-        	if (counterOn < counterMax) { // start counting the ON frames
-        		counterOn++;
+        if (!trigger && isMoving) {
+            if (counterOn < counterMax) { // start counting the ON frames
+                counterOn++;
                 markCounterTime = t;
-        	} else { // trigger is ON
+            } else { // trigger is ON
                 markTriggerTime = t;
-	        	trigger = true;
-	        }  
-        // 2. motion is triggered
+                trigger = true;
+            }
+            // 2. motion is triggered
         } else if (trigger && isMoving) { // keep resetting timer as long as motion is detected
             markTriggerTime = t;
-        // 3. motion no longer detected
-    	} else if (trigger && !isMoving && t > markTriggerTime + timeDelay) {
+            // 3. motion no longer detected
+        } else if (trigger && !isMoving && t > markTriggerTime + timeDelay) {
             trigger = false;
         }
 
@@ -163,15 +194,53 @@ void ofApp::update() {
     }
 }
 
-void ofApp::draw() {   
-    if (debug) {
-    	ofSetColor(255);
-    	ofBackground(0);
+//--------------------------------------------------------------
+void ofApp::draw() {
+    ofBackground(0);
 
-        if(!frame.empty()) {
-    	    drawMat(frame,0, 0);
-    	    curFlow->draw(0, 0);
-    	}
+    // bind our texture. in our shader this will now be tex0 by default
+    // so we can just go ahead and access it there.
+
+    shader.begin();
+
+    ofPushMatrix();
+
+    posTarget += motionValRaw * posScaler;
+
+    //float px = ofClamp(ofLerp(pos.x, posTarget.x, posSpeed), -posRange.x, posRange.x);
+    //float py = ofClamp(ofLerp(pos.y, posTarget.y, posSpeed), -posRange.y, posRange.y);
+    //pos = vec2(px, py);
+    pos = glm::clamp(glm::lerp(pos, posTarget, posSpeed), -posRange, posRange);
+
+    // translate plane into center screen.
+    ofTranslate(pos.x + posOffset.x, pos.y + posOffset.y, zPos);
+    ofScale(1, -1, 1);
+
+    rotTarget += motionValRaw * rotScaler;
+
+    //float rx = ofClamp(ofLerp(rot.x, rotTarget.x, rotSpeed), -rotRange.x, rotRange.x);
+    //float ry = ofClamp(ofLerp(rot.y, rotTarget.y, rotSpeed), -rotRange.y, rotRange.y);
+    //rot = vec2(rx, ry);
+    rot = glm::clamp(glm::lerp(rot, rotTarget, rotSpeed), -rotRange, rotRange);
+
+    ofRotateDeg(rot.x + rotOffset.x, 0, 1, 0);
+    ofRotateDeg(rot.y + rotOffset.y, 1, 0, 0);
+
+    plane.draw(); //drawWireframe();
+
+    ofPopMatrix();
+
+    posTarget = glm::lerp(posTarget, posOffsetOrig, returnSpeed);
+    rotTarget = glm::lerp(rotTarget, rotOffsetOrig, returnSpeed);
+
+    shader.end();
+
+    if (debug) {
+        ofSetColor(255);
+
+        if (!frame.empty()) {
+            curFlow->draw(0, 0);
+        }
 
         stringstream info;
         info << "FPS: " << ofGetFrameRate() << endl;
@@ -179,21 +248,22 @@ void ofApp::draw() {
     }
 }
 
-
 void ofApp::sendOsc() {
-	ofxOscMessage msg;
+/*
+ofxOscMessage msg;
 
     msg.setAddress("/pihole");
     msg.addStringArg(compname);
-    msg.addIntArg((int) trigger);
+    msg.addIntArg((int)trigger);
 
     // if you're only detecting motion, leave this off to save bandwidth
     if (sendMotionInfo) {
         msg.addFloatArg(motionVal); // total motion, always positive
         msg.addFloatArg(motionValRaw.x); // x change
         msg.addFloatArg(motionValRaw.y); // y change
-    }  
+    }
 
     sender.sendMessage(msg);
-    std:cout << "*** SENT: " << trigger << " ***\n";
+std:cout << "*** SENT: " << trigger << " ***\n";
+*/
 }
