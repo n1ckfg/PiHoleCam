@@ -90,16 +90,7 @@ void ofApp::setup() {
     // ~ ~ ~ ~ ~ ~ ~ 
 
     //ofEnableDepthTest();
-
-#ifdef TARGET_OPENGLES
     shader.load("shadersES2/shader");
-#else
-    if (ofIsGLProgrammableRenderer()) {
-        shader.load("shadersGL3/shader");
-    } else {
-        shader.load("shadersGL2/shader");
-    }
-#endif
 
     rgb.allocate(2048, 2048, OF_IMAGE_COLOR);
     rgb.loadImage("rgb.jpg");

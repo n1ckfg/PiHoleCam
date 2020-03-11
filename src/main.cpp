@@ -4,14 +4,8 @@
 //========================================================================
 int main() {
 
-#ifdef TARGET_OPENGLES
-	ofGLESWindowSettings settings;
+    ofGLESWindowSettings settings;
 	settings.glesVersion = 2;
-#else
-	ofGLWindowSettings settings;
-	settings.setGLVersion(3, 2);
-#endif
-
 	ofCreateWindow(settings);
     
 	// this kicks off the running of my app
