@@ -84,7 +84,7 @@ class ofApp : public ofBaseApp {
 		int counterOn;
 		int counterMax;
 
-		ofVideoGrabber cam;
+		ofxCvPiCam cam;
 		cv::Mat frame;
 
 		// for more camera settings, see:
