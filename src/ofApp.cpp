@@ -15,8 +15,9 @@ void ofApp::setup() {
     //movie.setLoopState(OF_LOOP_NORMAL);
     //movie.play();
 
+    string videoPath = ofToDataPath("./Comp_8.mp4", true);
     ofxOMXPlayerSettings omxSettings;
-    omxSettings.videoPath = "Comp_8.mp4";
+    omxSettings.videoPath = videoPath;
     omxSettings.useHDMIForAudio = true;    //default true
     omxSettings.enableTexture = true;      //default true
     omxSettings.enableLooping = true;      //default true
@@ -24,7 +25,7 @@ void ofApp::setup() {
     //omxSettings.doFlipTexture = true;        //default false
     
     movie.setup(omxSettings);
-    movie.start();
+    //movie.start();
 
     framerate = settings.getValue("settings:framerate", 60);
     width = settings.getValue("settings:width", 160);
@@ -107,7 +108,7 @@ void ofApp::setup() {
     // ~ ~ ~ ~ ~ ~ ~ 
 
     //ofEnableDepthTest();
-    shader.load("shadersES2/shader");
+    shader.load("shader");
 
     //rgb.allocate(2048, 2048, OF_IMAGE_COLOR);
     //rgb.loadImage("rgb.jpg");
@@ -202,6 +203,8 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+    if (!movie.isTextureEnabled()) return;
+    
     ofBackground(0);
 
     // bind our texture. in our shader this will now be tex0 by default
