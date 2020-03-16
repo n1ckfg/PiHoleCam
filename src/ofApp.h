@@ -4,6 +4,7 @@
 #include "ofxCv.h"
 #include "ofxOpenCv.h"
 #include "ofxCvPiCam.h"
+#include "ofxOMXPlayer.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
 

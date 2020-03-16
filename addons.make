@@ -1,5 +1,6 @@
 ofxCv
 ofxCvPiCam
 ofxOpenCv
+ofxOMXPlayer
 ofxOsc
 ofxXmlSettings
