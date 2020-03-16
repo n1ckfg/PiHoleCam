@@ -9,6 +9,23 @@ void ofApp::setup() {
     settings.loadFile("settings.xml");
 
     ofSetVerticalSync(false);
+    ofHideCursor();
+
+    //movie.load("Comp_8.mp4");
+    //movie.setLoopState(OF_LOOP_NORMAL);
+    //movie.play();
+
+    ofxOMXPlayerSettings settings;
+    settings.videoPath = "Comp_8.mp4";
+    settings.useHDMIForAudio = true;    //default true
+    settings.enableTexture = true;      //default true
+    settings.enableLooping = true;      //default true
+    settings.enableAudio = false;        //default true, save resources by disabling
+    //settings.doFlipTexture = true;        //default false
+    
+    movie.setup(settings);
+    movie.start();
+
     framerate = settings.getValue("settings:framerate", 60);
     width = settings.getValue("settings:width", 160);
     height = settings.getValue("settings:height", 120);
@@ -92,15 +109,13 @@ void ofApp::setup() {
     //ofEnableDepthTest();
     shader.load("shadersES2/shader");
 
-    rgb.allocate(2048, 2048, OF_IMAGE_COLOR);
-    rgb.loadImage("rgb.jpg");
-    depth.allocate(512, 512, OF_IMAGE_GRAYSCALE);
-    depth.loadImage("depth.png");
+    //rgb.allocate(2048, 2048, OF_IMAGE_COLOR);
+    //rgb.loadImage("rgb.jpg");
+    //depth.allocate(512, 512, OF_IMAGE_GRAYSCALE);
+    //depth.loadImage("depth.png");
     
-    rgb.getTexture().bind();
-
-    plane.set(800, 800, depth.getWidth(), depth.getHeight());
-    plane.mapTexCoordsFromTexture(rgb.getTexture());
+    plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
+    plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
 
     posOffset = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
     pos = vec2(posOffset.x, posOffset.y);
@@ -191,6 +206,7 @@ void ofApp::draw() {
 
     // bind our texture. in our shader this will now be tex0 by default
     // so we can just go ahead and access it there.
+    movie.getTextureReference().bind();
 
     shader.begin();
 

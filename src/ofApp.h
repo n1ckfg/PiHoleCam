@@ -19,7 +19,8 @@ class ofApp : public ofBaseApp {
 		
 	    ofShader shader;
 	    ofPlanePrimitive plane;
-	    ofImage rgb, depth;
+	    //ofImage rgb, depth;
+		ofxOMXPlayer movie;
 
 		vec2 pos = vec2(0, 0);
 		vec2 rot = vec2(0, 0);
@@ -39,6 +40,8 @@ class ofApp : public ofBaseApp {
 
 		float returnSpeed = 0.001;
 		float zPos = 100;
+		int planeResX = 192;
+		int planeResY = 108;
 
 		// ~ ~ ~ ~ ~ ~ ~ 
 
