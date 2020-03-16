@@ -4,10 +4,12 @@
     <port>7110</port>
     <width>160</width>
     <height>120</height>
-    <framerate>30</framerate>
+    <framerate>60</framerate>
     <debug>0</debug>
     <dense_flow>1</dense_flow>
     <send_motion_info>0</send_motion_info>
+    <plane_res_x>256</plane_res_x>
+    <plane_res_y>128</plane_res_y>
     <!-- * -->
     <!-- trigger settings -->
     <trigger_threshold>0.05</trigger_threshold>

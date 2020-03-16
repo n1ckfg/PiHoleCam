@@ -15,15 +15,15 @@ void ofApp::setup() {
     //movie.setLoopState(OF_LOOP_NORMAL);
     //movie.play();
 
-    ofxOMXPlayerSettings settings;
-    settings.videoPath = "Comp_8.mp4";
-    settings.useHDMIForAudio = true;    //default true
-    settings.enableTexture = true;      //default true
-    settings.enableLooping = true;      //default true
-    settings.enableAudio = false;        //default true, save resources by disabling
-    //settings.doFlipTexture = true;        //default false
+    ofxOMXPlayerSettings omxSettings;
+    omxSettings.videoPath = "Comp_8.mp4";
+    omxSettings.useHDMIForAudio = true;    //default true
+    omxSettings.enableTexture = true;      //default true
+    omxSettings.enableLooping = true;      //default true
+    omxSettings.enableAudio = false;        //default true, save resources by disabling
+    //omxSettings.doFlipTexture = true;        //default false
     
-    movie.setup(settings);
+    movie.setup(omxSettings);
     movie.start();
 
     framerate = settings.getValue("settings:framerate", 60);
