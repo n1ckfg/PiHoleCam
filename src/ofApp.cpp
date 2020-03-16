@@ -115,8 +115,8 @@ void ofApp::setup() {
     //depth.allocate(512, 512, OF_IMAGE_GRAYSCALE);
     //depth.loadImage("depth.png");
     
-    plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
-    plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
+    //plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
+    //plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
 
     posOffset = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
     pos = vec2(posOffset.x, posOffset.y);
@@ -205,6 +205,12 @@ void ofApp::update() {
 void ofApp::draw() {
     if (!movie.isTextureEnabled()) return;
     
+    if (firstRun) {
+        plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
+        plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
+        firstRun = false;
+    }
+
     ofBackground(0);
 
     // bind our texture. in our shader this will now be tex0 by default
