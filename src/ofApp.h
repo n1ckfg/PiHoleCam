@@ -21,7 +21,6 @@ class ofApp : public ofBaseApp {
 	    ofPlanePrimitive plane;
 	    //ofImage rgb, depth;
 		ofxOMXPlayer movie;
-		bool firstRun = true;
 		
 		vec2 pos = vec2(0, 0);
 		vec2 rot = vec2(0, 0);

@@ -115,8 +115,9 @@ void ofApp::setup() {
     //depth.allocate(512, 512, OF_IMAGE_GRAYSCALE);
     //depth.loadImage("depth.png");
     
-    //plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
+    plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
     //plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
+    plane.mapTexCoordsFromTexture(movie.getTextureReference());
 
     posOffset = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
     pos = vec2(posOffset.x, posOffset.y);
@@ -203,13 +204,7 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-    if (!movie.isTextureEnabled()) return;
-    
-    if (firstRun) {
-        plane.set(movie.getWidth(), movie.getHeight(), planeResX, planeResY);
-        plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
-        firstRun = false;
-    }
+    //if (!movie.isTextureEnabled()) return;
 
     ofBackground(0);
 
