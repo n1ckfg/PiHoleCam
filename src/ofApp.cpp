@@ -15,7 +15,9 @@ void ofApp::setup() {
     //movie.setLoopState(OF_LOOP_NORMAL);
     //movie.play();
 
-    string videoPath = ofToDataPath("./Comp_8.mp4", true);
+    movieFile = settings.getValue("settings:movie_file", "test.mp4");
+
+    string videoPath = ofToDataPath("./" + movieFile, true);
     ofxOMXPlayerSettings omxSettings;
     omxSettings.videoPath = videoPath;
     omxSettings.useHDMIForAudio = true;    //default true

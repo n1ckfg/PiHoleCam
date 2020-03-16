@@ -10,6 +10,7 @@
     <send_motion_info>0</send_motion_info>
     <plane_res_x>256</plane_res_x>
     <plane_res_y>128</plane_res_y>
+    <movie_file>Comp_8.mp4</movie_file>
     <!-- * -->
     <!-- trigger settings -->
     <trigger_threshold>0.05</trigger_threshold>

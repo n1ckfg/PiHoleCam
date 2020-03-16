@@ -21,7 +21,8 @@ class ofApp : public ofBaseApp {
 	    ofPlanePrimitive plane;
 	    //ofImage rgb, depth;
 		ofxOMXPlayer movie;
-		
+		string movieFile;
+
 		vec2 pos = vec2(0, 0);
 		vec2 rot = vec2(0, 0);
 		vec2 rotRange = vec2(25, 15);
