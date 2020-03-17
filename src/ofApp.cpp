@@ -39,8 +39,9 @@ void ofApp::setup() {
     ofSetFrameRate(framerate);
 
     cam.setup(width, height, false); // color/gray;
-    imitate(previous, cam);
-    imitate(diff, cam);
+    frame.allocate(width, height);
+    imitate(previous, frame);
+    imitate(diff, frame);
 
     planeResX = settings.getValue("settings:plane_res_x", 128);
     planeResY = settings.getValue("settings:plane_res_y", 128);
