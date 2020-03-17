@@ -175,7 +175,7 @@ void ofApp::update() {
 
         isMoving = motionVal > triggerThreshold;
 
-        std::cout << "val: " << motionVal << " motion: " << isMoving << endl;
+        if (debug) std::cout << "val: " << motionVal << " motion: " << isMoving << endl;
 
         int t = ofGetElapsedTimeMillis();
 
