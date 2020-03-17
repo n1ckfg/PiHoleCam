@@ -1,7 +1,5 @@
 #include "ofApp.h"
 
-using namespace cv;
-using namespace ofxCv;
 using namespace glm;
 
 //--------------------------------------------------------------
