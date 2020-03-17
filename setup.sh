@@ -12,6 +12,6 @@ cd $DIR
 
 cd bin/data
 
-FILENAME=Comp_8.mp4
-
-wget https://fox-gieg.com/stuff/rpi/$FILENAME
+wget https://fox-gieg.com/stuff/rpi/Comp_8_360p.mp4
+wget https://fox-gieg.com/stuff/rpi/Comp_8_540p.mp4
+wget https://fox-gieg.com/stuff/rpi/Comp_8_1080p.mp4
