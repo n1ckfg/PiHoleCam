@@ -39,9 +39,6 @@ void ofApp::setup() {
     ofSetFrameRate(framerate);
 
     cam.setup(width, height, false); // color/gray;
-    frame.allocate(width, height);
-    imitate(previous, frame);
-    imitate(diff, frame);
 
     planeResX = settings.getValue("settings:plane_res_x", 128);
     planeResY = settings.getValue("settings:plane_res_y", 128);
@@ -84,7 +81,11 @@ void ofApp::update() {
     frame = cam.grab();
 
     if (!frame.empty()) {
-        columnLast = columnNow;
+        if (firstRun) {
+            imitate(previous, frame);
+            imitate(diff, frame);
+            firstRun = false;
+        }
 
         // take the absolute difference of prev and cam and save it inside diff
         absdiff(frame, previous, diff);

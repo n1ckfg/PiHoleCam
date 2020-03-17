@@ -52,8 +52,7 @@ class ofApp : public ofBaseApp {
 		ofPixels previous;
 		ofImage diff;
 		cv::Mat frame, columnMean;
-		float columnNow = 0;
-		float columnLast = 0;
+		bool firstRun = true;
 
 		// for more camera settings, see:
 		// https://github.com/orgicus/ofxCvPiCam/blob/master/example-ofxCvPiCam-allSettings/src/testApp.cpp
