@@ -41,8 +41,12 @@ void ofApp::setup() {
 
     if (sendMotionInfo) sender.setup(host, port);
 
-    rotScaler = vec2(settings.getValue("settings:rot_scale_x", 1.0), settings.getValue("settings.rot_scale_y"), 0.1);
-    posScaler = vec2(settings.getValue("settings:pos_scale_x", -1.0), settings.getValue("settings.pos_scale_y"), 0.5);
+    float rx = settings.getValue("settings:rot_scale_x", 1.0);
+    float ry = settings.getValue("settings.rot_scale_y", 0.1);
+    float px = settings.getValue("settings:pos_scale_x", -1.0);
+    float py = settings.getValue("settings.pos_scale_y", 0.5);  
+    rotScaler = vec2(rx, ry);
+    posScaler = vec2(px, py);
     
     // ~ ~ ~   get a persistent name for this computer   ~ ~ ~
     compname = "RPi";
