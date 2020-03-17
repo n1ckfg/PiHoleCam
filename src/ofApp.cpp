@@ -61,8 +61,7 @@ void ofApp::setup() {
     cam.setup(width, height, false); // color/gray;
 
     triggerThreshold = settings.getValue("settings:trigger_threshold", 0.05);
-
-    flowResetThreshold = settings.getValue("settings:flow_reset_threshold", 1.0);
+    sendMotionInfo = (bool)settings.getValue("settings:send_motion_info", 1);
     counterMax = settings.getValue("settings:trigger_frames", 3);
     timeDelay = settings.getValue("settings:time_delay", 5000);
     counterDelay = settings.getValue("settings:counter_reset", 1000);
@@ -87,19 +86,19 @@ void ofApp::setup() {
 
     // ~ ~ ~   optical flow settings   ~ ~ ~
     useFarneback = (bool)settings.getValue("settings:dense_flow", 1);
-    sendMotionInfo = (bool)settings.getValue("settings:send_motion_info", 1);
-    pyrScale = 0.5;   // 0 to 1, default 0.5
-    levels = 4;   // 1 to 8, default 4
-    winsize = 8;   // 4 to 64, default 8
-    iterations = 2;   // 1 to 8, default 2
-    polyN = 7;   // 5 to 10, default 7
-    polySigma = 1.5;   // 1.1 to 2, default 
-    OPTFLOW_FARNEBACK_GAUSSIAN = false; // default false
-    winSize = 32;   // 4 to 64, default 32
-    maxLevel = 3;   // 0 to 8, default 3
-    maxFeatures = 200;   // 1 to 1000, default 200
-    qualityLevel = 0.01;   // 0.001 to 0.02, default 0.01
-    minDistance = 4;   // 1 to 16, default 4
+    flowResetThreshold = settings.getValue("settings:flow_reset_threshold", 1.0);
+    pyrScale = settings.getValue("settings:pyr_scale", 0.5);   // 0 to 1, default 0.5
+    levels = settings.getValue("settings:levels", 4);   // 1 to 8, default 4
+    winsize = settings.getValue("settings:win_size", 8);   // 4 to 64, default 8
+    iterations = settings.getValue("settings:iterations", 2);   // 1 to 8, default 2
+    polyN = settings.getValue("settings:poly_n", 7);   // 5 to 10, default 7
+    polySigma = settings.getValue("settings:poly_sigma", 1.5);   // 1.1 to 2, default 
+    OPTFLOW_FARNEBACK_GAUSSIAN = (bool)settings.getValue("settings:optflow_farneback_gaussian", 0); // default false
+    winSize = settings.getValue("settings:win_size", 32);   // 4 to 64, default 32
+    maxLevel = settings.getValue("settings:max_level", 3);   // 0 to 8, default 3
+    maxFeatures = settings.getValue("settings:max_features", 200);   // 1 to 1000, default 200
+    qualityLevel = settings.getValue("settings:quality_level", 0.01);   // 0.001 to 0.02, default 0.01
+    minDistance = settings.getValue("settings:min_distance", 4);   // 1 to 16, default 4
 
     motionVal = 0;
     counterOn = 0;
