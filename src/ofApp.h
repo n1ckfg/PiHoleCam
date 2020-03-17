@@ -43,7 +43,7 @@ class ofApp : public ofBaseApp {
 
 		// ~ ~ ~ ~ ~ ~ ~ 
 		ofxXmlSettings settings;
-
+		string movieFile;
 		int width, halfWidth, lBoundary, rBoundary, height, centerZone;
 
 		vec2 motionValRaw;
