@@ -39,8 +39,11 @@ void ofApp::setup() {
 
     debug = (bool)settings.getValue("settings:debug", 1);
 
-    sender.setup(host, port);
+    if (sendMotionInfo) sender.setup(host, port);
 
+    rotScaler = vec2(settings.getValue("settings:rot_scale_x", 1.0), settings.getValue("settings.rot_scale_y"), 0.1);
+    posScaler = vec2(settings.getValue("settings:pos_scale_x", -1.0), settings.getValue("settings.pos_scale_y"), 0.5);
+    
     // ~ ~ ~   get a persistent name for this computer   ~ ~ ~
     compname = "RPi";
     file.open(ofToDataPath("compname.txt"), ofFile::ReadWrite, false);
@@ -193,7 +196,7 @@ void ofApp::update() {
             trigger = false;
         }
 
-        sendOsc();
+        if (sendMotionInfo) sendOsc();
     }
 
     // optical flow can get stuck in feedback loops
@@ -261,21 +264,16 @@ void ofApp::draw() {
 }
 
 void ofApp::sendOsc() {
-/*
-ofxOscMessage msg;
+    ofxOscMessage msg;
 
     msg.setAddress("/pihole");
     msg.addStringArg(compname);
     msg.addIntArg((int)trigger);
 
-    // if you're only detecting motion, leave this off to save bandwidth
-    if (sendMotionInfo) {
-        msg.addFloatArg(motionVal); // total motion, always positive
-        msg.addFloatArg(motionValRaw.x); // x change
-        msg.addFloatArg(motionValRaw.y); // y change
-    }
-
+    msg.addFloatArg(motionVal); // total motion, always positive
+    msg.addFloatArg(motionValRaw.x); // x change
+    msg.addFloatArg(motionValRaw.y); // y change
+    
     sender.sendMessage(msg);
-std:cout << "*** SENT: " << trigger << " ***\n";
-*/
+    if (debug) std:cout << "*** SENT: " << trigger << " ***\n";
 }

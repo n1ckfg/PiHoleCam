@@ -19,7 +19,6 @@ class ofApp : public ofBaseApp {
 		
 	    ofShader shader;
 	    ofPlanePrimitive plane;
-	    //ofImage rgb, depth;
 		ofxOMXPlayer movie;
 		string movieFile;
 
@@ -30,7 +29,7 @@ class ofApp : public ofBaseApp {
 		vec2 rotOffset = vec2(0, 0);
 		vec2 rotOffsetOrig = vec2(rotOffset.x, rotOffset.y);
 		vec2 rotTarget = vec2(rotOffset.x, rotOffset.y);
-		vec2 rotScaler = vec2(0.5, 0.1);
+		vec2 rotScaler = vec2(1.0, 0.1);
 
 		float posSpeed = 0.65;
 		vec2 posRange = vec2(150, 10);

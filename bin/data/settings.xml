@@ -4,11 +4,15 @@
     <port>7110</port>
     <width>160</width>
     <height>120</height>
-    <framerate>60</framerate>
+    <framerate>30</framerate>
     <debug>0</debug>
     <send_motion_info>0</send_motion_info>
-    <plane_res_x>256</plane_res_x>
-    <plane_res_y>128</plane_res_y>
+    <plane_res_x>128</plane_res_x>
+    <plane_res_y>64</plane_res_y>
+    <rot_scale_x>1.0</rot_scale_x>
+    <rot_scale_y>0.1</rot_scale_y>
+    <pos_scale_x>-1.0</pos_scale_x>
+    <pos_scale_y>0.5</pos_scale_y>
     <movie_file>Comp_8.mp4</movie_file>
     <!-- * -->
     <!-- trigger settings -->
