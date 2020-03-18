@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxOpenCv.h"
-#include "ofxCvPiCam.h"
+#include "ofxOMXCamera.h"
 #include "ofxOMXPlayer.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
@@ -88,7 +88,8 @@ class ofApp : public ofBaseApp {
 		int counterOn;
 		int counterMax;
 
-		ofxCvPiCam cam;
+		ofxOMXVideoGrabber cam;
+		ofxOMXCameraSettings camSettings;
 		cv::Mat frame;
 
 		// for more camera settings, see:
@@ -102,7 +103,7 @@ class ofApp : public ofBaseApp {
 		int camExposureCompensation; // -10 to 10, default 0;
 
 		// 0 off, 1 auto, 2 night, 3 night preview, 4 backlight, 5 spotlight, 6 sports, 7, snow, 8 beach, 9 very long, 10 fixed fps, 11 antishake, 12 fireworks, 13 max
-		int camExposureMode; // 0 to 13, default 0
+		string camExposureMode; // default off
 
 		//string oscAddress;
 		int framerate;

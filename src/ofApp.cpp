@@ -63,9 +63,7 @@ void ofApp::setup() {
         buff.set(compname.c_str(), compname.size());
         ofBufferToFile("compname.txt", buff);
     }
-    std::cout << compname << endl;
-
-    cam.setup(width, height, false); // color/gray;
+    std::cout << compname << endl;  
 
     triggerThreshold = settings.getValue("settings:trigger_threshold", 0.05);
     sendMotionInfo = (bool)settings.getValue("settings:send_motion_info", 1);
@@ -82,14 +80,21 @@ void ofApp::setup() {
     camExposureCompensation = settings.getValue("settings:exposure_compensation", 0);
     camShutterSpeed = settings.getValue("settings:shutter_speed", 0);
 
-    cam.setSharpness(camSharpness);
-    cam.setContrast(camContrast);
-    cam.setBrightness(camBrightness);
-    cam.setISO(camIso);
-    cam.setExposureMode((MMAL_PARAM_EXPOSUREMODE_T)camExposureMode);
-    cam.setExposureCompensation(camExposureCompensation);
-    cam.setShutterSpeed(camShutterSpeed);
-    //cam.setFrameRate // not implemented in ofxCvPiCam
+    camSettings.sensorWidth = width;
+    camSettings.sensorHeight = height;
+    camSettings.framerate = framerate;
+    camSettings.enableTexture = true;
+    camSettings.enablePixels = true;
+    cam.Settings.autoISO = false;
+    cam.Settings.autoShutter = false;
+    camSettings.brightness = camBrightness;
+    camSettings.sharpness = camSharpness;
+    camSettings.contrast = camContrast;
+    camSettings.ISO = camIso;
+    camSettings.exposurePreset = camExposureMode;
+    camSettings.evCompensation = camExposureCompensation;
+    camSettings.shutterSpeed = camShutterSpeed;
+    cam.setup(settings); 
 
     // ~ ~ ~   optical flow settings   ~ ~ ~
     useFarneback = (bool)settings.getValue("settings:dense_flow", 1);
@@ -133,7 +138,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    frame = cam.grab();
+    frame =  ofxCv::toCv(cam.getPixels());
 
     if (!frame.empty()) {
         if (useFarneback) {
