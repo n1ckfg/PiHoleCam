@@ -85,8 +85,8 @@ void ofApp::setup() {
     camSettings.framerate = framerate;
     camSettings.enableTexture = true;
     camSettings.enablePixels = true;
-    cam.Settings.autoISO = false;
-    cam.Settings.autoShutter = false;
+    camSettings.autoISO = false;
+    camSettings.autoShutter = false;
     camSettings.brightness = camBrightness;
     camSettings.sharpness = camSharpness;
     camSettings.contrast = camContrast;
