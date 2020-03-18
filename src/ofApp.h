@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxOpenCv.h"
-#include "ofxOMXCamera.h"
+#include "ofxOMXVideoGrabber.h"
 #include "ofxOMXPlayer.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
