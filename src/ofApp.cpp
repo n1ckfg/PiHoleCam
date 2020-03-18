@@ -84,7 +84,7 @@ void ofApp::setup() {
     camSettings.sensorHeight = height;
     camSettings.framerate = framerate;
     camSettings.enableTexture = true;
-    camSettings.enablePixels = false;
+    camSettings.enablePixels = true;
     camSettings.autoISO = false;
     camSettings.autoShutter = false;
     camSettings.brightness = camBrightness;
