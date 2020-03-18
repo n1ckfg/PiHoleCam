@@ -83,8 +83,8 @@ void ofApp::setup() {
     camSettings.sensorWidth = width;
     camSettings.sensorHeight = height;
     camSettings.framerate = framerate;
-    camSettings.enableTexture = false; // send to GPU
-    camSettings.enablePixels = true; // convert for openCV
+    camSettings.enableTexture = true;
+    camSettings.enablePixels = false;
     camSettings.autoISO = false;
     camSettings.autoShutter = false;
     camSettings.brightness = camBrightness;
