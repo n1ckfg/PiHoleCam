@@ -94,7 +94,7 @@ void ofApp::setup() {
     camSettings.exposurePreset = camExposureMode;
     camSettings.evCompensation = camExposureCompensation;
     camSettings.shutterSpeed = camShutterSpeed;
-    cam.setup(settings); 
+    cam.setup(camSettings); 
 
     // ~ ~ ~   optical flow settings   ~ ~ ~
     useFarneback = (bool)settings.getValue("settings:dense_flow", 1);
