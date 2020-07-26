@@ -2,6 +2,7 @@
 <settings>
     <host>BrazilV.local</host>
     <port>7110</port>
+    <url>beach_16-9.mp4</url>
     <width>160</width>
     <height>120</height>
     <framerate>30</framerate>
@@ -13,7 +14,6 @@
     <rot_scale_y>0.1</rot_scale_y>
     <pos_scale_x>-1.0</pos_scale_x>
     <pos_scale_y>0.5</pos_scale_y>
-    <movie_file>Comp_8.mp4</movie_file>
     <!-- * -->
     <!-- trigger settings -->
     <trigger_threshold>0.05</trigger_threshold>

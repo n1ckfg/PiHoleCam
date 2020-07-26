@@ -20,7 +20,7 @@ class ofApp : public ofBaseApp {
 	    ofShader shader;
 	    ofPlanePrimitive plane;
 		ofxOMXPlayer movie;
-		string movieFile;
+		string url;
 
 		vec2 pos = vec2(0, 0);
 		vec2 rot = vec2(0, 0);

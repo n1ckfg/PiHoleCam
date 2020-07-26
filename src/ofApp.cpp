@@ -15,9 +15,9 @@ void ofApp::setup() {
     //movie.setLoopState(OF_LOOP_NORMAL);
     //movie.play();
 
-    movieFile = settings.getValue("settings:movie_file", "test.mp4");
+    url = settings.getValue("settings:url", "test.mp4");
 
-    string videoPath = ofToDataPath("./" + movieFile, true);
+    string videoPath = ofToDataPath("./" + url, true);
     ofxOMXPlayerSettings omxSettings;
     omxSettings.videoPath = videoPath;
     omxSettings.useHDMIForAudio = true;    //default true
@@ -65,7 +65,7 @@ void ofApp::setup() {
     }
     std::cout << compname << endl;
 
-    cam.setup(width, height, false); // color/gray;
+    cam.setup(width, height, 30, false); // color/gray;
 
     triggerThreshold = settings.getValue("settings:trigger_threshold", 0.05);
     sendMotionInfo = (bool)settings.getValue("settings:send_motion_info", 1);
