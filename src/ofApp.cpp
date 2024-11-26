@@ -32,12 +32,14 @@ void ofApp::setup() {
 
     debug = (bool)settings.getValue("settings:debug", 1);
 
+    /*
     float rx = settings.getValue("settings:rot_scale_x", 1.0);
     float ry = settings.getValue("settings.rot_scale_y", 0.1);
     float px = settings.getValue("settings:pos_scale_x", -1.0);
     float py = settings.getValue("settings.pos_scale_y", 0.5);  
     rotScaler = vec2(rx, ry);
     posScaler = vec2(px, py);
+    */
     
     // ~ ~ ~   get a persistent name for this computer   ~ ~ ~
     compname = "RPi";
@@ -61,12 +63,20 @@ void ofApp::setup() {
     //ofEnableDepthTest();
     shader.load("shader");
 
+    planeResX = settings.getValue("settings:plane_res_x", 128);
+    planeResY = settings.getValue("settings:plane_res_y", 64);
+
     plane.set(ofGetWidth(), ofGetHeight(), planeResX, planeResY);
     //plane.mapTexCoords(movie.getWidth(), movie.getHeight(), 1, 1);
     plane.mapTexCoordsFromTexture(movie.getTextureReference());
 
-    posOffset = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
-    pos = vec2(posOffset.x, posOffset.y);
+    pos = vec2(ofGetWidth() / 2, ofGetHeight() / 2);
+
+    float posOffsetX = settings.getValue("settings:pos_offset_x", 0.0);
+    float posOffsetY = settings.getValue("settings:pos_offset_y", 0.0);
+    posOffset = vec2(posOffsetX, posOffsetY);
+
+    pos += posOffset;
 }
 
 //--------------------------------------------------------------
@@ -84,26 +94,26 @@ void ofApp::draw() {
 
     ofPushMatrix();
 
-    posTarget += motionValRaw * posScaler;
+    //posTarget += motionValRaw * posScaler;
 
-    pos = glm::clamp(glm::mix(pos, posTarget, posSpeed), -posRange, posRange);
+    //pos = glm::clamp(glm::mix(pos, posTarget, posSpeed), -posRange, posRange);
 
-    ofTranslate(pos.x + posOffset.x, pos.y + posOffset.y, zPos);
+    ofTranslate(pos.x, pos.y, zPos);
     //ofScale(1, -1, 1);
 
-    rotTarget += motionValRaw * rotScaler;
+    //rotTarget += motionValRaw * rotScaler;
 
-    rot = glm::clamp(glm::mix(rot, rotTarget, rotSpeed), -rotRange, rotRange);
+    //rot = glm::clamp(glm::mix(rot, rotTarget, rotSpeed), -rotRange, rotRange);
 
-    ofRotateDeg(rot.x + rotOffset.x, 0, 1, 0);
-    ofRotateDeg(rot.y + rotOffset.y, 1, 0, 0);
+    //ofRotateDeg(rot.x + rotOffset.x, 0, 1, 0);
+    //ofRotateDeg(rot.y + rotOffset.y, 1, 0, 0);
 
     plane.draw(); //drawWireframe();
 
     ofPopMatrix();
 
-    posTarget = glm::mix(posTarget, posOffsetOrig, returnSpeed);
-    rotTarget = glm::mix(rotTarget, rotOffsetOrig, returnSpeed);
+    //posTarget = glm::mix(posTarget, posOffsetOrig, returnSpeed);
+    //rotTarget = glm::mix(rotTarget, rotOffsetOrig, returnSpeed);
 
     shader.end();
 }

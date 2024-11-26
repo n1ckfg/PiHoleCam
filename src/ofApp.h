@@ -36,8 +36,8 @@ class ofApp : public ofBaseApp {
 
 		float returnSpeed = 0.001;
 		float zPos = 100;
-		int planeResX = 192;
-		int planeResY = 108;
+		int planeResX = 128;
+		int planeResY = 64;
 
 		// ~ ~ ~ ~ ~ ~ ~ 
 
